@@ -1,0 +1,1 @@
+2026-09-12 — Maksim Kalinski — подключил GitHub, создал свою ветку, настроил подключение pgAdmin к PostgreSQL в Docker.
