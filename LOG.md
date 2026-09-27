@@ -1,2 +1,2 @@
 2026-09-12 — Maksim Kalinski — подключил GitHub, создал свою ветку, настроил подключение pgAdmin к PostgreSQL в Docker.
-2026-09-14 — Maksim Kalinski — создал HTML-афишу с тремя фильмами, постерами и навигацией по странице. Добавил CSS: тёмную тему, сетку карточек и правило для узкого экрана.
+2026-09-28 — Maksim Kalinski — Created 10 database tables with primary keys, foreign keys, and data validation rules. Exported the database structure to project.sql and saved the ER diagram as diagram.png.
