@@ -1,0 +1,3 @@
+2026-09-12 — Maksim Kalinski — подключил GitHub, создал свою ветку, настроил подключение pgAdmin к PostgreSQL в Docker.
+2026-09-28 — Maksim Kalinski — Created 10 database tables with primary keys, foreign keys, and data validation rules. Exported the database structure to project.sql and saved the ER diagram as diagram.png.
+2026-10-01 — Maksim Kalinski — Set up Laravel with PostgreSQL. Added migrations, Eloquent models and relationships for the cinema database. Created factories and seeders with at least 100 records per project table. Tested rebuilding and seeding the database from scratch.
