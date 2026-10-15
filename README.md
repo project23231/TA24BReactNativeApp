@@ -148,3 +148,58 @@ php artisan migrate:fresh --seed
 
 This deletes all tables and their data in the configured database,
 then recreates and seeds them.
+
+## Query indexes
+
+These indexes support the planned movie list, filters and schedule pages.
+They are created through a Laravel migration.
+
+- movies(release_date): supports sorting movies by release date.
+- movie_genres(genre_id, movie_id): supports finding movies of a selected genre.
+- halls(cinema_id): supports finding halls in a selected cinema.
+- screenings(starts_at): supports filtering screenings by a time range and sorting by start time.
+- screenings(hall_id, starts_at): supports finding screenings in a selected hall within a time range.
+
+Existing primary-key and unique indexes are reused.
+
+Date filters will use start and end timestamps, for example:
+starts_at >= day_start AND starts_at < next_day_start.
+This lets the query use the index without applying a date function
+to the indexed column.
+
+An ordinary B-tree index on the title is not added for substring
+search such as ILIKE '%home%'.
+
+Index performance has not been benchmarked yet.
+With small tables, PostgreSQL may choose a table scan.
+
+## Caching plan
+
+This is a plan. Query-result caching is not implemented yet.
+
+| Cached result | Lifetime | When to clear it |
+|---|---|---|
+| First three pages of the movie list | 5 minutes | After adding, editing or deleting a movie, or changing its genres |
+| Movie details with genres | 10 minutes | After changing or deleting that movie, its genre links or genre names |
+| Genre list | 1 hour | After adding, editing or deleting a genre |
+| Screenings for a selected date and cinema, without seat availability | 1 minute | After adding, editing, cancelling or deleting a screening, or changing displayed movie, hall or cinema details |
+
+Movie-list cache keys must include page number, search text,
+filters and sorting. Schedule keys must include the selected date
+and cinema. Dates are interpreted in the Europe/Tallinn time zone.
+
+When data changes, clear all affected cache variants after the
+database transaction commits. For a rescheduled screening,
+clear both the old and new date/cinema variants.
+
+Seat availability will not be cached initially.
+Booking and ticket changes must be checked against current database
+data. The database unique index remains responsible for preventing
+two valid tickets for the same screening and seat.
+
+A ticket booking does not require clearing the schedule cache
+because that cache contains no seat counts or availability.
+
+We plan to use Laravel Cache with the file store first.
+Redis can be added later by configuring a Redis connection and
+changing the cache store.
