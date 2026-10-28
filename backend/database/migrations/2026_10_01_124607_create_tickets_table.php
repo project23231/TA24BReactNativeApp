@@ -40,11 +40,11 @@ return new class extends Migration
                 ->on('seats');
         });
 
-        DB::statement("
+        DB::statement('
             ALTER TABLE tickets
             ADD CONSTRAINT tickets_price_positive
             CHECK (price > 0)
-        ");
+        ');
 
         DB::statement("
             CREATE UNIQUE INDEX tickets_valid_seat_unique

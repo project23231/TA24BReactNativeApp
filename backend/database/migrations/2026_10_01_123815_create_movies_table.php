@@ -20,11 +20,11 @@ return new class extends Migration
             $table->text('trailer_url')->nullable();
         });
 
-        DB::statement("
+        DB::statement('
             ALTER TABLE movies
             ADD CONSTRAINT movies_duration_positive
             CHECK (duration_minutes > 0)
-        ");
+        ');
     }
 
     public function down(): void

@@ -32,13 +32,13 @@ return new class extends Migration
             $table->unique(['id', 'hall_id']);
         });
 
-        DB::statement("
+        DB::statement('
             ALTER TABLE screenings
             ADD CONSTRAINT screenings_price_positive
                 CHECK (price > 0),
             ADD CONSTRAINT screenings_time_valid
                 CHECK (ends_at > starts_at)
-        ");
+        ');
     }
 
     public function down(): void
