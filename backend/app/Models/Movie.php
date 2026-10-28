@@ -21,6 +21,9 @@ class Movie extends Model
 {
     use HasFactory;
 
+    /** Allowed values, the same list as the movies_age_rating_valid constraint. */
+    public const AGE_RATINGS = ['0+', '6+', '12+', '16+', '18+'];
+
     public $timestamps = false;
 
     public function genres(): BelongsToMany

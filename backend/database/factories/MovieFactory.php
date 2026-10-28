@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Movie;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MovieFactory extends Factory
@@ -13,9 +14,7 @@ class MovieFactory extends Factory
             'description' => fake()->paragraph(),
             'duration_minutes' => fake()->numberBetween(80, 180),
             'release_date' => fake()->date(),
-            'age_rating' => fake()->randomElement([
-                '0+', '6+', '12+', '16+', '18+',
-            ]),
+            'age_rating' => fake()->randomElement(Movie::AGE_RATINGS),
             'poster_url' => null,
             'trailer_url' => null,
         ];
