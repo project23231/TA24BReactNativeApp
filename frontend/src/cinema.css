@@ -45,3 +45,19 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 footer .brand { font-size: 21px; }
 @media (max-width: 950px) { .movie-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .header-note { display: none; } }
 @media (max-width: 650px) { .site-header { padding: 20px; justify-content: space-between; gap: 20px; } .brand { font-size: 23px; } main { padding: 36px 18px 55px; } h1 { letter-spacing: -1.6px; } .movie-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 14px; } .poster-fallback { padding: 14px; } .poster-fallback strong { font-size: 21px; } .movie-copy h2 { font-size: 17px; } .page-heading { align-items: start; margin-bottom: 28px; } .result-count { display: none; } footer { flex-wrap: wrap; padding: 25px 20px; } footer p { margin: 0; } footer > span:last-child { width: 100%; } .pagination { gap: 13px; } }
+
+.screening-link { display: inline-flex; gap: 18px; color: #e4c781; font-size: 12px; font-weight: bold; padding: 12px 0 3px; }
+.screening-link:hover { text-decoration: underline; }
+.schedule-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 24px; margin: 32px 0; padding: 24px; background: #191d23; border: 1px solid #303640; border-radius: 9px; }
+.schedule-controls label { display: grid; gap: 8px; color: #afb5c0; font-size: 12px; }
+.schedule-controls input, .schedule-controls select { border: 1px solid #4a505b; border-radius: 5px; background: #10151c; color: #f5f3ef; padding: 10px 12px; min-height: 44px; max-width: 100%; }
+.schedule-controls select { max-width: 430px; }
+.secondary { background: transparent; color: #dfc78a; }
+.schedule-summary { display: flex; justify-content: space-between; gap: 20px; color: #989fac; font-size: 12px; margin: 25px 0 15px; }
+.screening { display: grid; grid-template-columns: 100px minmax(0, 1fr) 100px; align-items: center; gap: 28px; padding: 25px 0; border-top: 1px solid #303640; }
+.screening-time time { display: block; font-size: 30px; color: #e1c584; font-weight: 700; }
+.screening-time > span, .screening-price > span { display: block; color: #969da9; font-size: 11px; font-weight: normal; }
+.screening h2 { font-size: 21px; margin: 5px 0 8px; }
+.screening-copy .eyebrow { margin: 0; }
+.screening-price { text-align: right; font-size: 24px; font-weight: 700; }
+@media (max-width: 650px) { .schedule-controls { gap: 16px; padding: 18px; } .schedule-controls label { width: 100%; } .schedule-controls select { width: 100%; max-width: 100%; } .screening { grid-template-columns: 65px minmax(0, 1fr); gap: 18px; } .screening-price { grid-column: 2; text-align: left; font-size: 20px; } .screening-price > span { display: inline; margin-left: 9px; } .screening-time time { font-size: 23px; } }

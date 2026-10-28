@@ -304,3 +304,13 @@ from backend/.env. Create it once, run migrations with DB_DATABASE=kino_test,
 then run php vendor/bin/phpunit from backend/. Test fixtures roll back after
 each test; the development database is never reset.
 
+
+## KIN-5: Session schedule
+
+Open `/schedule` in the frontend. Select a date and optional cinema, or use
+"View screenings" on a movie card to show just that film. Times and dates use
+Europe/Tallinn regardless of the visitor's computer timezone. Prices are EUR.
+The schedule excludes cancelled/already started screenings and supports
+pagination, retries and empty results. The database must contain future
+screenings; the supplied ScreeningSeeder creates dates across the next 14 days.
+No booking or payment action is included in this feature.

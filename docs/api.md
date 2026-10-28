@@ -116,3 +116,18 @@ one movie, so the filter never offers an option with no results.
   ]
 }
 ```
+
+## KIN-5: Session schedule
+
+`GET /api/cinemas` returns `{ data: [{id, name, city, address}] }`, sorted by city/name.
+
+`GET /api/screenings?date=2026-11-05&cinema_id=1&movie_id=2&page=1&per_page=20`
+returns a paginated resource collection (`data`, `links`, `meta`). All filters are
+optional. Date defaults to today in Europe/Tallinn. Every screening includes the
+shared screening fields plus `movie` (with genres) and `hall.cinema`.
+
+Only scheduled screenings that have not started are returned, sorted by start
+time then ID. A date represents the half-open interval from local midnight to
+next local midnight, converted to UTC; DST boundaries are respected. Invalid
+dates/IDs/pages return 422; valid filters with no screenings return an empty list.
+Page size defaults to 30 and may be 1–50.

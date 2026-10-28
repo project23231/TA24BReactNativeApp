@@ -10,3 +10,5 @@
 - 2026-10-28 — Jaromir Kuras — fixed the teacher's code review: removed the backend service from docker-compose (it showed .env), fixed the users migration, better seed data, new migrations with indexes and constraints, cleaned up the frontend and docs.
 
 - 2026-10-29 — KIN-1: Connect React movie listings to the shared PostgreSQL API, with pagination and request states.
+
+- 2026-10-29 — KIN-5: Add PostgreSQL session schedule, cinema/date/movie selection, Tallinn timezone boundaries and pagination.
