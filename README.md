@@ -100,14 +100,15 @@ Migrations create the tables and constraints.
 DatabaseSeeder runs the individual seeders in dependency order.
 
 The seeders create:
-- 100 cinemas and 100 halls
-- 10,000 seats
+- 100 cinemas with 2–3 halls each (Hall 1, Hall 2, ...)
+- 100 seats per hall (10 rows × 10 seats), inserted in one query per hall
 - 100 movies and 100 test genres
 - 100–300 movie–genre links
 - 100 users
-- 100 screenings
-- 100 bookings
-- 100 tickets
+- 2–4 screenings per hall on one day within the next 14 days,
+  one after another with a 20-minute break, so they never overlap
+- one booking per screening
+- 1–4 tickets per booking, on free seats of the screening's hall
 
 Genre names are artificial demo values.
 Related records are created using existing database IDs.

@@ -14,7 +14,13 @@ class ScreeningFactory extends Factory
         return [
             'movie_id' => Movie::factory(),
             'hall_id' => Hall::factory(),
-            'starts_at' => now()->addWeek()->setTime(18, 0),
+
+            // Spread screenings over the next two weeks so date filters can be tested.
+            'starts_at' => Carbon::instance(fake()->dateTimeBetween('+1 day', '+14 days'))
+                ->setTime(
+                    fake()->numberBetween(10, 22),
+                    fake()->randomElement([0, 15, 30, 45]),
+                ),
 
             'ends_at' => function (array $attributes) {
                 $movie = Movie::findOrFail($attributes['movie_id']);
