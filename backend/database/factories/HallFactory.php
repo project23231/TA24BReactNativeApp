@@ -11,7 +11,7 @@ class HallFactory extends Factory
     {
         return [
             'cinema_id' => Cinema::factory(),
-            'name' => 'Hall ' . fake()->numberBetween(1, 10),
+            'name' => 'Hall '.fake()->numberBetween(1, 10),
         ];
     }
 }

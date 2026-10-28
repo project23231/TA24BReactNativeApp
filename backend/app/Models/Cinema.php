@@ -15,7 +15,7 @@ class Cinema extends Model
     public $timestamps = false;
 
     public function halls(): HasMany
-{
-    return $this->hasMany(Hall::class);
-}
+    {
+        return $this->hasMany(Hall::class);
+    }
 }

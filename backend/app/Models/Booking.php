@@ -37,8 +37,9 @@ class Booking extends Model
     {
         return $this->belongsTo(Screening::class);
     }
+
     public function tickets(): HasMany
-{
-    return $this->hasMany(Ticket::class);
-}
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

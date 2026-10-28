@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-
 #[Fillable([
     'movie_id',
     'hall_id',
@@ -44,12 +43,14 @@ class Screening extends Model
     {
         return $this->belongsTo(Hall::class);
     }
+
     public function bookings(): HasMany
-{
-    return $this->hasMany(Booking::class);
-}
-public function tickets(): HasMany
-{
-    return $this->hasMany(Ticket::class);
-}
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

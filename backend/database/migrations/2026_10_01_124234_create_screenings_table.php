@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('screenings', function (Blueprint $table) {
-            $table->integer('id')->generatedAs('')->primary();
+            $table->integer('id')->generatedAs()->primary();
             $table->integer('movie_id');
             $table->integer('hall_id');
             $table->timestampTz('starts_at');
