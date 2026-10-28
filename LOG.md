@@ -7,4 +7,4 @@
 - 2026-10-01 — Maksim Kalinski — set up Laravel with PostgreSQL, wrote migrations, models, factories and seeders (100+ rows per table).
 - 2026-10-07 — Maksim Kalinski — wrote the backend setup steps in the README.
 - 2026-10-15 — Maksim Kalinski — added indexes for the movie list, filters and schedule, wrote the caching plan.
-- 2026-10-28 — Maksim Kalinski — fixed the teacher's code review: removed the backend service from docker-compose (it showed .env), fixed the users migration, better seed data, new migrations with indexes and constraints, cleaned up the frontend and docs.
+- 2026-10-28 — Jaromir Kuras — fixed the teacher's code review: removed the backend service from docker-compose (it showed .env), fixed the users migration, better seed data, new migrations with indexes and constraints, cleaned up the frontend and docs.
