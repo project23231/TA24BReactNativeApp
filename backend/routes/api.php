@@ -13,3 +13,5 @@ Route::get('/movies/{movie}', [MovieController::class, 'show'])
     ->where('movie', '[0-9]{1,9}');
 
 Route::get('/genres', [GenreController::class, 'index']);
+
+Route::get('/ping', fn () => response()->json(['message' => 'API works']));

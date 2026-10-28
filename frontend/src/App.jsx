@@ -1,19 +1,12 @@
-import { Button, Container, Title, Text } from '@mantine/core'
+import MoviesPage from './pages/MoviesPage'
+import './cinema.css'
 
-function App() {
+export default function App() {
   return (
-    <Container mt="xl">
-      <Title>Hello World</Title>
-
-      <Text mt="md">
-        Kinoshka frontend works
-      </Text>
-
-      <Button mt="md">
-        Mantine works
-      </Button>
-    </Container>
+    <>
+      <header className="site-header"><a className="brand" href="/" aria-label="Apollo Kino home">apollo<span>kino</span><i aria-hidden="true">●</i></a><nav aria-label="Main navigation"><a href="/" aria-current="page">Movies</a></nav><span className="header-note">Your seat. Your story.</span></header>
+      <main><MoviesPage /></main>
+      <footer><span className="brand">apollo<span>kino</span></span><p>A great story starts here.</p><span>Student cinema project</span></footer>
+    </>
   )
 }
-
-export default App

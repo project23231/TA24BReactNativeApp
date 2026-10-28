@@ -34,6 +34,7 @@ class MovieIndexRequest extends FormRequest
             'direction' => ['nullable', Rule::in(['asc', 'desc'])],
 
             'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
+            'page' => ['sometimes', 'integer', 'min:1'],
         ];
     }
 
@@ -58,3 +59,4 @@ class MovieIndexRequest extends FormRequest
         ]);
     }
 }
+

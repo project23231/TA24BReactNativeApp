@@ -1,13 +1,13 @@
+import process from 'node:process'
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 
-// https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
   server: {
-    watch: {
-      usePolling: true,
-      interval: 1000,
+    proxy: {
+      '/api': { target: loadEnv(mode, process.cwd(), '').API_PROXY_TARGET || 'http://127.0.0.1:8000', changeOrigin: true },
     },
+    watch: { usePolling: true, interval: 1000 },
   },
-})
+}))
