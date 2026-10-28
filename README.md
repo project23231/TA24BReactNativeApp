@@ -1,6 +1,11 @@
-# KinoPacanjata
+# Apollo Kino
 
-Cinema project by Maksim Kalinski and Jaromir Kuras.
+Cinema website project by Maksim Kalinski and Jaromir Kuras
+(Tallinna Polütehnikum, K-TA-24B).
+
+- Customer journey: [docs/customer-journey.md](docs/customer-journey.md)
+- Project log: [LOG.md](LOG.md)
+- Frontend: [frontend/README.md](frontend/README.md)
 
 ## Backend choice
 
@@ -11,7 +16,7 @@ records. Its factories and seeders work with Faker to generate demo data.
 ## Requirements
 
 - Docker Desktop
-- PHP 8.5 with pdo_pgsql and intl enabled
+- PHP 8.3 or newer with pdo_pgsql and intl enabled
 - Composer
 - Git
 
