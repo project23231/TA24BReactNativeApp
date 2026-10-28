@@ -1,6 +1,11 @@
-# KinoPacanjata
+# Apollo Kino
 
-Cinema project by Maksim Kalinski and Jaromir Kuras.
+Cinema website project by Maksim Kalinski and Jaromir Kuras
+(Tallinna Polütehnikum, K-TA-24B).
+
+- Customer journey: [docs/customer-journey.md](docs/customer-journey.md)
+- Project log: [LOG.md](LOG.md)
+- Frontend: [frontend/README.md](frontend/README.md)
 
 ## Backend choice
 
@@ -11,7 +16,7 @@ records. Its factories and seeders work with Faker to generate demo data.
 ## Requirements
 
 - Docker Desktop
-- PHP 8.5 with pdo_pgsql and intl enabled
+- PHP 8.3 or newer with pdo_pgsql and intl enabled
 - Composer
 - Git
 
@@ -36,9 +41,16 @@ Start the database service:
 docker compose up -d database
 ```
 
-PostgreSQL uses the named volume postgres_data.
+PostgreSQL uses the named volume postgres_data
+(Docker shows it as kino_postgres_data).
 The volume keeps the data when the container is removed.
 Do not use docker compose down -v if you want to keep the data.
+
+The compose project used to be called kinoshka_epta. After the rename
+Docker creates a new, empty volume kino_postgres_data. If you set the
+project up before the rename, run the createdb command below and
+`php artisan migrate:fresh --seed` again. The old volume can then be
+removed with `docker volume rm kinoshka_epta_postgres_data`.
 
 Create the Laravel development database:
 
@@ -100,14 +112,15 @@ Migrations create the tables and constraints.
 DatabaseSeeder runs the individual seeders in dependency order.
 
 The seeders create:
-- 100 cinemas and 100 halls
-- 10,000 seats
+- 100 cinemas with 2–3 halls each (Hall 1, Hall 2, ...)
+- 100 seats per hall (10 rows × 10 seats), inserted in one query per hall
 - 100 movies and 100 test genres
 - 100–300 movie–genre links
 - 100 users
-- 100 screenings
-- 100 bookings
-- 100 tickets
+- 2–4 screenings per hall on one day within the next 14 days,
+  one after another with a 20-minute break, so they never overlap
+- one booking per screening
+- 1–4 tickets per booking, on free seats of the screening's hall
 
 Genre names are artificial demo values.
 Related records are created using existing database IDs.
@@ -138,6 +151,21 @@ restricted values defined through Laravel's enum method.
 For a new installation, use migrations rather than importing project.sql
 and then running the same migrations.
 
+Constraints worth knowing:
+
+- A seat can have only one valid ticket per screening
+  (partial unique index tickets_valid_seat_unique).
+- A ticket's seat and screening must be in the same hall
+  (composite foreign keys on tickets).
+- Two scheduled screenings in one hall cannot overlap in time
+  (exclusion constraint screenings_no_overlap, needs the btree_gist extension).
+- Hall names are unique within a cinema.
+- age_rating is one of 0+, 6+, 12+, 16+, 18+.
+- bookings.cancelled_at can be set only on cancelled bookings.
+- Deleting a movie or genre deletes its movie_genres links.
+  All other foreign keys keep the default NO ACTION, so movies, screenings,
+  seats and users with bookings or tickets cannot be deleted by accident.
+
 ## Rebuild demo data
 
 Only for the disposable kino_dev development database:
@@ -159,6 +187,18 @@ They are created through a Laravel migration.
 - halls(cinema_id): supports finding halls in a selected cinema.
 - screenings(starts_at): supports filtering screenings by a time range and sorting by start time.
 - screenings(hall_id, starts_at): supports finding screenings in a selected hall within a time range.
+
+PostgreSQL does not index foreign keys automatically. These indexes
+support the model relations and foreign-key checks when a parent row
+is deleted:
+
+- screenings(movie_id): screenings of a movie.
+- bookings(user_id): "my bookings" page.
+- bookings(screening_id): bookings of a screening.
+- tickets(booking_id): tickets in a booking.
+- tickets(seat_id): tickets for a seat, checked when a seat is deleted.
+- tickets(screening_id): all tickets of a screening. The partial unique
+  index tickets_valid_seat_unique covers only valid tickets.
 
 Existing primary-key and unique indexes are reused.
 
@@ -186,11 +226,50 @@ This is a plan. Query-result caching is not implemented yet.
 
 Movie-list cache keys must include page number, search text,
 filters and sorting. Schedule keys must include the selected date
-and cinema. Dates are interpreted in the Europe/Tallinn time zone.
+and cinema.
 
-When data changes, clear all affected cache variants after the
-database transaction commits. For a rescheduled screening,
-clear both the old and new date/cinema variants.
+### Clearing many key variants with the file store
+
+There can be any number of movie-list keys (every page, search text
+and filter combination), and the file store cannot list them or use
+`Cache::tags()`. So each group of keys contains a version number.
+Changing the data increases the version, and all old keys stop being
+used at once. They expire on their own after their lifetime.
+
+```php
+$v = Cache::rememberForever('movies:version', fn () => 1);
+$key = "movies:v{$v}:page={$page}:q={$q}:genre={$genre}:sort={$sort}";
+
+// after a movie or genre change:
+Cache::increment('movies:version');
+```
+
+Schedule keys work the same way with their own version
+(`schedule:v{$v}:{date}:{cinema}`). When we switch to Redis,
+tags can replace the version numbers.
+
+### When the cache is cleared
+
+The version is increased only after the database transaction commits,
+never inside it. Otherwise another request could cache the old data
+again before the commit. We will use model observers with
+`public $afterCommit = true;` (or `DB::afterCommit(...)` in a service).
+
+### Time zone
+
+The application stores and compares times in UTC
+(`'timezone' => 'UTC'` in backend/config/app.php), and the database
+columns are timestampTz. A selected date is turned into a time range in
+the Europe/Tallinn time zone before querying:
+
+```php
+$start = Carbon::parse($date, 'Europe/Tallinn')->startOfDay();
+$end = $start->copy()->addDay();
+// where starts_at >= $start and starts_at < $end
+```
+
+Without this, screenings between 00:00 and 03:00 local time would be
+counted on the wrong day.
 
 Seat availability will not be cached initially.
 Booking and ticket changes must be checked against current database

@@ -22,8 +22,8 @@ return new class extends Migration
                 ->on('movies');
 
             $table->foreign('genre_id')
-    ->references('id')
-    ->on('genres');
+                ->references('id')
+                ->on('genres');
         });
     }
 

@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('screenings', function (Blueprint $table) {
-            $table->integer('id')->generatedAs('')->primary();
+            $table->integer('id')->generatedAs()->primary();
             $table->integer('movie_id');
             $table->integer('hall_id');
             $table->timestampTz('starts_at');
@@ -32,13 +32,13 @@ return new class extends Migration
             $table->unique(['id', 'hall_id']);
         });
 
-        DB::statement("
+        DB::statement('
             ALTER TABLE screenings
             ADD CONSTRAINT screenings_price_positive
                 CHECK (price > 0),
             ADD CONSTRAINT screenings_time_valid
                 CHECK (ends_at > starts_at)
-        ");
+        ');
     }
 
     public function down(): void

@@ -19,8 +19,9 @@ class Seat extends Model
     {
         return $this->belongsTo(Hall::class);
     }
+
     public function tickets(): HasMany
-{
-    return $this->hasMany(Ticket::class);
-}
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

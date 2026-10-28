@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cinemas', function (Blueprint $table) {
-           $table->integer('id')->generatedAs('')->primary();
-                 $table->text('name');
-                 $table->text('city');
-                 $table->text('address');
+            $table->integer('id')->generatedAs()->primary();
+            $table->text('name');
+            $table->text('city');
+            $table->text('address');
         });
     }
 

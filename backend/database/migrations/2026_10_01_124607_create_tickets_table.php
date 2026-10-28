@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tickets', function (Blueprint $table) {
-            $table->integer('id')->generatedAs('')->primary();
+            $table->integer('id')->generatedAs()->primary();
             $table->integer('booking_id');
             $table->integer('screening_id');
             $table->integer('seat_id');
@@ -40,11 +40,11 @@ return new class extends Migration
                 ->on('seats');
         });
 
-        DB::statement("
+        DB::statement('
             ALTER TABLE tickets
             ADD CONSTRAINT tickets_price_positive
             CHECK (price > 0)
-        ");
+        ');
 
         DB::statement("
             CREATE UNIQUE INDEX tickets_valid_seat_unique

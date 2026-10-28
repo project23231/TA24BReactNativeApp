@@ -21,15 +21,17 @@ class Hall extends Model
     }
 
     public function seats(): HasMany
-{
-    return $this->hasMany(Seat::class);
-}
-public function screenings(): HasMany
-{
-    return $this->hasMany(Screening::class);
-}
-public function tickets(): HasMany
-{
-    return $this->hasMany(Ticket::class);
-}
+    {
+        return $this->hasMany(Seat::class);
+    }
+
+    public function screenings(): HasMany
+    {
+        return $this->hasMany(Screening::class);
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

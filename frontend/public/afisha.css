@@ -1,4 +1,4 @@
-/*obshee govno*/
+/* Base page styles */
 * {
   box-sizing: border-box;
 }
@@ -14,7 +14,7 @@ a {
   color: #ffcc66;
 }
 
-/*hueta dlja filmov*/
+/* Movie card grid: three columns on wide screens */
 .movie-list {
   display: grid;
   grid-template-columns: repeat(3,minmax(0, 1fr));
@@ -31,7 +31,7 @@ a {
   object-fit: contain;
 }
 
-/*zabej nahuj*/
+/* Narrow screens (up to 800px): one column, smaller padding */
 @media (max-width: 800px) {
   body {
     padding: 16px;
@@ -41,7 +41,7 @@ a {
   }
 }
 
-/*eti ebanie ssilki sverhu epta*/
+/* Navigation links to the movies at the top of the page */
 .movie-nav {
   display: flex;
   flex-wrap: wrap;
