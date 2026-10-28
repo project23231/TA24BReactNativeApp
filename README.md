@@ -161,6 +161,18 @@ They are created through a Laravel migration.
 - screenings(starts_at): supports filtering screenings by a time range and sorting by start time.
 - screenings(hall_id, starts_at): supports finding screenings in a selected hall within a time range.
 
+PostgreSQL does not index foreign keys automatically. These indexes
+support the model relations and foreign-key checks when a parent row
+is deleted:
+
+- screenings(movie_id): screenings of a movie.
+- bookings(user_id): "my bookings" page.
+- bookings(screening_id): bookings of a screening.
+- tickets(booking_id): tickets in a booking.
+- tickets(seat_id): tickets for a seat, checked when a seat is deleted.
+- tickets(screening_id): all tickets of a screening. The partial unique
+  index tickets_valid_seat_unique covers only valid tickets.
+
 Existing primary-key and unique indexes are reused.
 
 Date filters will use start and end timestamps, for example:
