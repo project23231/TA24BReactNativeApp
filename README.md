@@ -36,9 +36,16 @@ Start the database service:
 docker compose up -d database
 ```
 
-PostgreSQL uses the named volume postgres_data.
+PostgreSQL uses the named volume postgres_data
+(Docker shows it as kino_postgres_data).
 The volume keeps the data when the container is removed.
 Do not use docker compose down -v if you want to keep the data.
+
+The compose project used to be called kinoshka_epta. After the rename
+Docker creates a new, empty volume kino_postgres_data. If you set the
+project up before the rename, run the createdb command below and
+`php artisan migrate:fresh --seed` again. The old volume can then be
+removed with `docker volume rm kinoshka_epta_postgres_data`.
 
 Create the Laravel development database:
 

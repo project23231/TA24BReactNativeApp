@@ -1,4 +1,4 @@
-name: kinoshka_epta
+name: kino
 services:
   frontend:
     image: node:24
