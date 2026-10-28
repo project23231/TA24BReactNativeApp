@@ -13,12 +13,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'screening_id',
     'customer_email',
     'status',
+    'cancelled_at',
 ])]
 class Booking extends Model
 {
     use HasFactory;
 
     const UPDATED_AT = null;
+
+    protected function casts(): array
+    {
+        return [
+            'cancelled_at' => 'datetime',
+        ];
+    }
 
     public function user(): BelongsTo
     {

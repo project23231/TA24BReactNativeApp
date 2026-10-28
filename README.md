@@ -139,6 +139,21 @@ restricted values defined through Laravel's enum method.
 For a new installation, use migrations rather than importing project.sql
 and then running the same migrations.
 
+Constraints worth knowing:
+
+- A seat can have only one valid ticket per screening
+  (partial unique index tickets_valid_seat_unique).
+- A ticket's seat and screening must be in the same hall
+  (composite foreign keys on tickets).
+- Two scheduled screenings in one hall cannot overlap in time
+  (exclusion constraint screenings_no_overlap, needs the btree_gist extension).
+- Hall names are unique within a cinema.
+- age_rating is one of 0+, 6+, 12+, 16+, 18+.
+- bookings.cancelled_at can be set only on cancelled bookings.
+- Deleting a movie or genre deletes its movie_genres links.
+  All other foreign keys keep the default NO ACTION, so movies, screenings,
+  seats and users with bookings or tickets cannot be deleted by accident.
+
 ## Rebuild demo data
 
 Only for the disposable kino_dev development database:
