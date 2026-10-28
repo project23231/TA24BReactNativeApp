@@ -221,11 +221,50 @@ This is a plan. Query-result caching is not implemented yet.
 
 Movie-list cache keys must include page number, search text,
 filters and sorting. Schedule keys must include the selected date
-and cinema. Dates are interpreted in the Europe/Tallinn time zone.
+and cinema.
 
-When data changes, clear all affected cache variants after the
-database transaction commits. For a rescheduled screening,
-clear both the old and new date/cinema variants.
+### Clearing many key variants with the file store
+
+There can be any number of movie-list keys (every page, search text
+and filter combination), and the file store cannot list them or use
+`Cache::tags()`. So each group of keys contains a version number.
+Changing the data increases the version, and all old keys stop being
+used at once. They expire on their own after their lifetime.
+
+```php
+$v = Cache::rememberForever('movies:version', fn () => 1);
+$key = "movies:v{$v}:page={$page}:q={$q}:genre={$genre}:sort={$sort}";
+
+// after a movie or genre change:
+Cache::increment('movies:version');
+```
+
+Schedule keys work the same way with their own version
+(`schedule:v{$v}:{date}:{cinema}`). When we switch to Redis,
+tags can replace the version numbers.
+
+### When the cache is cleared
+
+The version is increased only after the database transaction commits,
+never inside it. Otherwise another request could cache the old data
+again before the commit. We will use model observers with
+`public $afterCommit = true;` (or `DB::afterCommit(...)` in a service).
+
+### Time zone
+
+The application stores and compares times in UTC
+(`'timezone' => 'UTC'` in backend/config/app.php), and the database
+columns are timestampTz. A selected date is turned into a time range in
+the Europe/Tallinn time zone before querying:
+
+```php
+$start = Carbon::parse($date, 'Europe/Tallinn')->startOfDay();
+$end = $start->copy()->addDay();
+// where starts_at >= $start and starts_at < $end
+```
+
+Without this, screenings between 00:00 and 03:00 local time would be
+counted on the wrong day.
 
 Seat availability will not be cached initially.
 Booking and ticket changes must be checked against current database
