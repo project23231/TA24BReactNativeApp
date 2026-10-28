@@ -3,6 +3,7 @@
 Cinema website project by Maksim Kalinski and Jaromir Kuras
 (Tallinna Polütehnikum, K-TA-24B).
 
+- API: [docs/api.md](docs/api.md)
 - Customer journey: [docs/customer-journey.md](docs/customer-journey.md)
 - Project log: [LOG.md](LOG.md)
 - Frontend: [frontend/README.md](frontend/README.md)
@@ -114,15 +115,16 @@ DatabaseSeeder runs the individual seeders in dependency order.
 The seeders create:
 - 100 cinemas with 2–3 halls each (Hall 1, Hall 2, ...)
 - 100 seats per hall (10 rows × 10 seats), inserted in one query per hall
-- 100 movies and 100 test genres
-- 100–300 movie–genre links
+- 100 real genres and 100 real movies with their real genres
+  (lists in backend/database/data/genres.php and movies.php)
 - 100 users
 - 2–4 screenings per hall on one day within the next 14 days,
   one after another with a 20-minute break, so they never overlap
 - one booking per screening
 - 1–4 tickets per booking, on free seats of the screening's hall
 
-Genre names are artificial demo values.
+Only the release year of the movies is real, the day is always 1 January.
+Cinemas, users and screenings are random demo data.
 Related records are created using existing database IDs.
 
 Run the seeders once on a fresh database.
@@ -136,8 +138,8 @@ From the backend directory:
 php artisan serve
 ```
 
-Open http://127.0.0.1:8000.
-Currently, this displays the default Laravel page.
+Open http://127.0.0.1:8000/api/movies.
+The API is described in [docs/api.md](docs/api.md).
 
 ## Database structure
 
