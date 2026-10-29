@@ -8,6 +8,12 @@ export function cinemaDate() {
   return `${part('year')}-${part('month')}-${part('day')}`
 }
 
+export function cinemaDay(iso) {
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone: CINEMA_TIMEZONE, weekday: 'short', day: 'numeric', month: 'short',
+  }).format(new Date(iso))
+}
+
 export function cinemaTime(iso) {
   return new Intl.DateTimeFormat('en-GB', {
     timeZone: CINEMA_TIMEZONE, hour: '2-digit', minute: '2-digit',
