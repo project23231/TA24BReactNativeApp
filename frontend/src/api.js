@@ -3,7 +3,9 @@ export async function getJson(path, signal) {
   if (!response.ok) {
     throw new Error(response.status === 422
       ? 'Please check your selection and try again.'
-      : 'Cinema data is unavailable. Please try again in a moment.')
+      : response.status === 404
+        ? 'We could not find what you were looking for.'
+        : 'Cinema data is unavailable. Please try again in a moment.')
   }
   return response.json()
 }

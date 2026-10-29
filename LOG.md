@@ -12,3 +12,5 @@
 - 2026-10-29 — KIN-1: Connect React movie listings to the shared PostgreSQL API, with pagination and request states.
 
 - 2026-10-29 — KIN-5: Add PostgreSQL session schedule, cinema/date/movie selection, Tallinn timezone boundaries and pagination.
+
+- 2026-10-29 — Jaromir Kuras — connected movie search, filters and movie details to the website. You can now search movies by title, filter by genre, age rating and screening day, sort the list, and open a movie page with its description and upcoming screenings.
