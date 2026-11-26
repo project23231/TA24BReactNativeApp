@@ -8,6 +8,12 @@ Cinema website project by Maksim Kalinski and Jaromir Kuras
 - Project log: [LOG.md](LOG.md)
 - Frontend: [frontend/README.md](frontend/README.md)
 
+## Load testing
+
+| Team member | Tool | Guide |
+| --- | --- | --- |
+| Jaromir Kuras | pgbench | [PostgreSQL screening benchmark](docs/testing/pgbench.md) |
+
 ## Backend choice
 
 We use PHP with Laravel and its Eloquent ORM. Laravel provides migrations
