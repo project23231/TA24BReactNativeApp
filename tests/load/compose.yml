@@ -41,7 +41,9 @@ services:
       COMPOSER_CACHE_DIR: /composer-cache
       COMPOSER_ALLOW_SUPERUSER: "1"
     volumes:
-      - ../../backend:/app:ro
+      # Docker needs a writable parent to create missing nested mount points
+      # on a fresh clone. Dependencies and generated data use separate mounts.
+      - ../../backend:/app
       - ./environment.env:/app/.env:ro
       - ./:/bench:ro
       - load_vendor:/app/vendor

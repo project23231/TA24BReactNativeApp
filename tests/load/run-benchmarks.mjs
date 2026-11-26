@@ -23,9 +23,6 @@ const environment = {
   host: { os: platform(), release: release(), cpu: cpus()[0].model, logical_cpus: cpus().length, memory_bytes: totalmem() },
   docker: JSON.parse(capture('docker', ['info', '--format',
     '{"version":"{{.ServerVersion}}","cpus":{{.NCPU}},"memory_bytes":{{.MemTotal}},"architecture":"{{.Architecture}}"}'])),
-  images: Object.fromEntries(['php:8.4-cli', 'postgres:17', 'grafana/k6:2.4.0'].map((name) => [
-    name, JSON.parse(capture('docker', ['image', 'inspect', name, '--format', '{{json .RepoDigests}}'])),
-  ])),
 };
 
 function docker(args, env, allowThresholdFailure = false) {
@@ -61,6 +58,12 @@ for (const workers of [1, 4]) {
   }
 }
 
+// Record images after the suite has pulled/built them, so the first run on a
+// fresh Docker installation does not require any pre-existing image tags.
+environment.images = Object.fromEntries(['kino-load-load-api', 'postgres:17', 'grafana/k6:2.4.0'].map((name) => [
+  name, JSON.parse(capture('docker', ['image', 'inspect', name, '--format',
+    '{"image_id":{{json .Id}},"repo_digests":{{json .RepoDigests}}}'])),
+]));
 environment.php = capture('docker', [...compose, 'exec', '-T', 'load-api', 'php', '-r', 'echo PHP_VERSION;']);
 environment.laravel = capture('docker', [...compose, 'exec', '-T', 'load-api', 'php', 'artisan', '--version']);
 environment.postgresql = capture('docker', [...compose, 'exec', '-T', 'load-database', 'psql', '-U', 'kino_load', '-d', 'kino_load', '-Atc', 'SHOW server_version']);

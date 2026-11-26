@@ -74,6 +74,9 @@ export function setup() {
   if (fixture.rows.screenings !== 10000 || fixture.rows.tickets !== 50000) {
     throw new Error('Expected 10,000 screenings and 50,000 tickets. Rerun the load-seed service.');
   }
+  if (fixture.totals.day !== 500 || fixture.totals.cinema !== 25 || fixture.totals.movie !== 5) {
+    throw new Error('Expected non-empty day, cinema and movie fixtures. Rerun the load-seed service.');
+  }
   if (Date.now() >= Date.parse(fixture.starts_at)) {
     throw new Error('The fixture date is stale. Rerun the load-seed service.');
   }
