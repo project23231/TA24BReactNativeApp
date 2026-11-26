@@ -1,0 +1,34 @@
+{
+  "started_at": "2026-11-26T12:00:34.897Z",
+  "commit": "9d5c0c67ac47d9527436e538e49b50d45f3deddb",
+  "application_tree": "8a7814de1873ff674fdfbdd003af6b70dfb77f25",
+  "host": {
+    "os": "win32",
+    "release": "10.0.26200",
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12450H",
+    "logical_cpus": 12,
+    "memory_bytes": 16869146624
+  },
+  "docker": {
+    "version": "29.7.2",
+    "cpus": 12,
+    "memory_bytes": 8171765760,
+    "architecture": "x86_64"
+  },
+  "images": {
+    "php:8.4-cli": [
+      "php@sha256:a545b9041fb0e378cb597b4d0509f77c6a4d996dd485763af92e5b7e59c469cc"
+    ],
+    "postgres:17": [
+      "postgres@sha256:67f41722b7a8cbdb868a44a4995c846eddfdc2973bccb291ce937dce88ad5675"
+    ],
+    "grafana/k6:2.4.0": [
+      "grafana/k6@sha256:d41bb79cd8de5a7ad619b53570e3712633e8bff0937010a5c6c57a4747e7a276"
+    ]
+  },
+  "php": "8.4.25",
+  "laravel": "Laravel Framework 13.34.0",
+  "postgresql": "17.11 (Debian 17.11-1.pgdg13+2)",
+  "k6": "k6 v2.4.0 (commit/dd9395906d, go1.27.3, linux/amd64)",
+  "completed_at": "2026-11-26T12:04:24.788Z"
+}

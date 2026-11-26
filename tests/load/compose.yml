@@ -1,0 +1,99 @@
+name: kino-load
+
+services:
+  load-database:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: kino_load
+      POSTGRES_USER: kino_load
+      POSTGRES_PASSWORD: local-benchmark-only
+    volumes:
+      - load_data:/var/lib/postgresql/data
+      - ./:/bench:ro
+      - ../../docs/testing/results/k6:/results
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kino_load -d kino_load"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  load-api:
+    build:
+      context: .
+    working_dir: /app
+    init: true
+    environment:
+      APP_ENV: benchmarking
+      APP_DEBUG: "false"
+      APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      APP_URL: http://load-api:8000
+      DB_CONNECTION: pgsql
+      DB_HOST: load-database
+      DB_PORT: "5432"
+      DB_DATABASE: kino_load
+      DB_USERNAME: kino_load
+      DB_PASSWORD: local-benchmark-only
+      CACHE_STORE: array
+      SESSION_DRIVER: array
+      QUEUE_CONNECTION: sync
+      LOG_CHANNEL: stderr
+      PHP_CLI_SERVER_WORKERS: ${LOAD_WORKERS:-4}
+      COMPOSER_CACHE_DIR: /composer-cache
+      COMPOSER_ALLOW_SUPERUSER: "1"
+    volumes:
+      # Docker needs a writable parent to create missing nested mount points
+      # on a fresh clone. Dependencies and generated data use separate mounts.
+      - ../../backend:/app
+      - ./environment.env:/app/.env:ro
+      - ./:/bench:ro
+      - load_vendor:/app/vendor
+      - composer_cache:/composer-cache
+    tmpfs:
+      - /app/storage
+      - /app/bootstrap/cache
+    command: ["sh", "/bench/start-api.sh"]
+    depends_on:
+      load-database:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1:8000/up') === false ? 1 : 0);"]
+      interval: 3s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+
+  load-seed:
+    image: postgres:17
+    environment:
+      PGHOST: load-database
+      PGUSER: kino_load
+      PGPASSWORD: local-benchmark-only
+      PGDATABASE: kino_load
+    volumes:
+      - ./:/bench:ro
+      - ../../docs/testing/results/k6:/results
+    command: ["sh", "/bench/seed.sh"]
+    depends_on:
+      load-api:
+        condition: service_healthy
+
+  k6:
+    image: grafana/k6:2.4.0
+    user: "0:0"
+    environment:
+      VUS: ${VUS:-10}
+      DURATION: ${DURATION:-30s}
+      RUN_ID: ${RUN_ID:-latest}
+      WORKERS: ${LOAD_WORKERS:-4}
+    volumes:
+      - ./:/scripts:ro
+      - ../../docs/testing/results/k6:/results
+    command: ["run", "/scripts/k6-screenings.js"]
+    depends_on:
+      load-seed:
+        condition: service_completed_successfully
+
+volumes:
+  load_data:
+  load_vendor:
+  composer_cache:

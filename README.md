@@ -8,6 +8,16 @@ Cinema website project by Maksim Kalinski and Jaromir Kuras
 - Project log: [LOG.md](LOG.md)
 - Frontend: [frontend/README.md](frontend/README.md)
 
+## Individual load testing tools
+
+| Team member | Tool | Scope |
+| --- | --- | --- |
+| Maksim Kalinski | k6 | Schedule API load testing; branch `test/k6-maksim` |
+| Jaromir Kuras | pgbench | Planned database-level testing in his own branch |
+
+Maksim's setup, measurements and conclusions are in [docs/testing/k6.md](docs/testing/k6.md).
+The k6 stand uses a separate local Docker database named `kino_load`.
+
 ## Backend choice
 
 We use PHP with Laravel and its Eloquent ORM. Laravel provides migrations
